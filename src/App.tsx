@@ -1,5 +1,5 @@
-import React, { useState, useReducer, useContext } from "react";
-import logo from "./logo.svg";
+import React, { useContext } from "react";
+
 import "./App.css";
 import { BarComponent } from "./Components/atoms/bar.component";
 import { ButtonComponent } from "./Components/atoms/button.component";
@@ -51,7 +51,7 @@ function Game() {
   const [health, dispatchHealth] = baseStats.healthReducer!;
   const [water, dispatchWater] = baseStats.waterReducer!;
   return (
-    <div>
+    <>
       <Circle />
       <div className="w-100 h-75 flex flex-row items-end justify-end">
         <BarComponent filled={food.val} />
@@ -72,7 +72,7 @@ function Game() {
           onClick={() => dispatchHealth({ type: "increment" })}
         />
       </div>
-    </div>
+    </>
   );
 }
 
@@ -83,11 +83,11 @@ const Circle = function() {
         <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
           <stop
             offset="0%"
-            style={{ stopColor: "rgb(0,255,0)", stopOpacity: 0.8 }}
+            style={{ stopColor: "rgb(0,255,0)", stopOpacity: 1 }}
           />
           <stop
             offset="100%"
-            style={{ stopColor: "rgb(0,0,0)", stopOpacity: 0 }}
+            style={{ stopColor: "rgb(255,255,255)", stopOpacity: 1 }}
           />
         </radialGradient>
       </defs>

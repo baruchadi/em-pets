@@ -45,7 +45,6 @@ function incDecReducer(
 }
 
 export function GameDataWrapper({ children }: { children: React.ReactNode }) {
-  //   const _incDecReducer = [incDecReducer, initialState];
   const foodReducer = useReducer(incDecReducer, initialState);
   const waterReducer = useReducer(incDecReducer, initialState);
   const healthReducer = useReducer(incDecReducer, initialState);

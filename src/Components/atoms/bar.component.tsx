@@ -1,6 +1,7 @@
 import React from "react";
 
 export const BarComponent = ({ max = 150, filled = 10 }) => {
+    const new_height = filled/100*max
   return (
     <svg width="1em" height={max} className="ph1">
       <g className="bars">
@@ -8,8 +9,8 @@ export const BarComponent = ({ max = 150, filled = 10 }) => {
         <rect
           fill="#cb4d3e"
           width="100%"
-          height={max-filled}
-          style={{ transition: "height 1s ease" }}
+          height={max-new_height}
+          style={{ transition: "height .5s ease" }}
         ></rect>
       </g>
     </svg>
