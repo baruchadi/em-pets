@@ -6,9 +6,17 @@ import { ButtonComponent } from "./Components/atoms/button.component";
 import { ScreenComponent } from "./Components/atoms/screen.component";
 import {
   GameDataWrapper,
-  GameContext,
-  BaseStats
-} from "./Components/game-store.component";
+  GameContext
+} from "./Components/data/game-store.component";
+import { Circle } from "./Components/atoms/circle.component";
+import { useGetBaseStats } from "./Components/data/getters/base-stats.getter";
+import { EmPet } from "./Components/em-pet.component";
+import {
+  useHealAction,
+  useWaterAction,
+  useFeedAction,
+  useBaseActions
+} from "./Components/data/actions/base.actions";
 
 const App: React.FC = () => {
   return (
@@ -24,34 +32,20 @@ const App: React.FC = () => {
   );
 };
 
-function useGetBaseStats(...keys: string[]): BaseStats | null {
-  const { baseStats } = useContext(GameContext) as {
-    baseStats: { [stat: string]: any };
-  };
-  const obj: { [stat: string]: any } = {};
-  keys.forEach(key => {
-    if (!key.endsWith("Reducer")) {
-      key += "Reducer";
-    }
-    if (baseStats[key]) {
-      obj[key] = baseStats[key];
-    } else {
-      return null;
-    }
-  });
-  return obj as BaseStats;
-}
-
 function Game() {
   const baseStats = useGetBaseStats("water", "health", "food");
+  const { feedAction, waterAction, healAction } = useBaseActions();
+
   if (!baseStats) {
     return <div>"Loading..."</div>;
   }
-  const [food, dispatchFood] = baseStats.foodReducer!;
-  const [health, dispatchHealth] = baseStats.healthReducer!;
-  const [water, dispatchWater] = baseStats.waterReducer!;
+  const [food] = baseStats.foodReducer!;
+  const [health] = baseStats.healthReducer!;
+  const [water] = baseStats.waterReducer!;
+
   return (
     <>
+      <EmPet />
       <Circle />
       <div className="w-100 h-75 flex flex-row items-end justify-end">
         <BarComponent filled={food.val} />
@@ -59,41 +53,12 @@ function Game() {
         <BarComponent filled={health.val} />
       </div>
       <div className="flex flex-row justify-center">
-        <ButtonComponent
-          text="feed"
-          onClick={() => dispatchFood({ type: "increment" })}
-        />
-        <ButtonComponent
-          text="water"
-          onClick={() => dispatchWater({ type: "increment" })}
-        />
-        <ButtonComponent
-          text="heal"
-          onClick={() => dispatchHealth({ type: "increment" })}
-        />
+        <ButtonComponent text="feed" onClick={feedAction} />
+        <ButtonComponent text="water" onClick={waterAction} />
+        <ButtonComponent text="heal" onClick={healAction} />
       </div>
     </>
   );
 }
-
-const Circle = function() {
-  return (
-    <svg>
-      <defs>
-        <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-          <stop
-            offset="0%"
-            style={{ stopColor: "rgb(0,255,0)", stopOpacity: 1 }}
-          />
-          <stop
-            offset="100%"
-            style={{ stopColor: "rgb(255,255,255)", stopOpacity: 1 }}
-          />
-        </radialGradient>
-      </defs>
-      <ellipse cx="200" cy="70" rx="85" ry="55" fill="url(#grad1)" />
-    </svg>
-  );
-};
 
 export default App;
